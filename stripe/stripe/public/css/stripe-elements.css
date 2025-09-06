@@ -1,0 +1,219 @@
+/* Stripe Payment Element Styles */
+.stripe-payment-element-container {
+    margin: 0 auto;
+}
+
+#stripe-payment-element {
+    border-radius: 8px;
+    border: 1px solid #e0e6eb;
+    padding: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#stripe-payment-element:focus-within {
+    border-color: #0570de;
+    box-shadow: 0 0 0 3px rgba(5, 112, 222, 0.1);
+}
+
+#stripe-express-checkout-element {
+    margin-bottom: 20px;
+}
+
+/* Express Checkout Button Styling */
+#stripe-express-checkout-element .ExpressCheckoutElement {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Payment Method Divider */
+.payment-method-divider {
+    position: relative;
+    margin: 24px 0;
+}
+
+.payment-method-divider span {
+    background: #ffffff;
+    padding: 0 16px;
+    color: #6c757d;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.payment-method-divider hr {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin: 0;
+    border: 0;
+    border-top: 1px solid #e0e6eb;
+    z-index: -1;
+}
+
+/* Payment Messages Styling */
+#stripe-payment-messages {
+    margin-top: 16px;
+}
+
+#stripe-payment-messages .alert {
+    border-radius: 8px;
+    border: none;
+    padding: 12px 16px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+#stripe-payment-messages .alert-danger {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border-left: 4px solid #dc2626;
+}
+
+#stripe-payment-messages .alert-success {
+    background-color: #f0fdf4;
+    color: #16a34a;
+    border-left: 4px solid #16a34a;
+}
+
+#stripe-payment-messages .alert-info {
+    background-color: #eff6ff;
+    color: #2563eb;
+    border-left: 4px solid #2563eb;
+}
+
+/* Loading States */
+.stripe-loading {
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+}
+
+.stripe-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #e0e6eb;
+    border-top: 2px solid #0570de;
+    border-radius: 50%;
+    animation: stripe-spin 1s linear infinite;
+}
+
+@keyframes stripe-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .stripe-payment-element-container {
+        max-width: 100% !important;
+        margin: 0;
+    }
+    
+    #stripe-payment-element {
+        padding: 12px;
+    }
+    
+    .payment-method-divider {
+        margin: 16px 0;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    #stripe-payment-element {
+        background-color: #1f2937;
+        border-color: #374151;
+        color: #f9fafb;
+    }
+    
+    .payment-method-divider span {
+        background: #1f2937;
+        color: #9ca3af;
+    }
+    
+    .payment-method-divider hr {
+        border-top-color: #374151;
+    }
+    
+    #stripe-payment-messages .alert-danger {
+        background-color: #7f1d1d;
+        color: #fca5a5;
+    }
+    
+    #stripe-payment-messages .alert-success {
+        background-color: #14532d;
+        color: #86efac;
+    }
+    
+    #stripe-payment-messages .alert-info {
+        background-color: #1e3a8a;
+        color: #93c5fd;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    #stripe-payment-element {
+        border-width: 2px;
+        border-color: #000000;
+    }
+    
+    #stripe-payment-element:focus-within {
+        border-color: #0000ff;
+        box-shadow: 0 0 0 3px rgba(0, 0, 255, 0.3);
+    }
+    
+    .payment-method-divider hr {
+        border-top-width: 2px;
+        border-top-color: #000000;
+    }
+}
+
+/* Accessibility Improvements */
+#stripe-payment-element:focus-within {
+    outline: none;
+}
+
+.payment-method-divider span {
+    font-weight: 600;
+    letter-spacing: 0.025em;
+}
+
+/* Animation for smooth transitions */
+#stripe-express-checkout-element,
+#stripe-payment-element {
+    transition: all 0.2s ease-in-out;
+}
+
+#stripe-express-checkout-element[style*="display: none"] {
+    display: none !important;
+}
+
+/* Custom styling for Stripe Elements */
+.StripeElement {
+    border-radius: 6px;
+    border: 1px solid #e0e6eb;
+    padding: 12px;
+    background-color: #ffffff;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.StripeElement:focus,
+.StripeElement:hover {
+    border-color: #0570de;
+}
+
+.StripeElement--invalid {
+    border-color: #dc2626;
+}
+
+.StripeElement--complete {
+    border-color: #16a34a;
+}
