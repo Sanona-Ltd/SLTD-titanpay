@@ -22,6 +22,12 @@ class StripePaymentService extends StripePaymentAbstract
 
         $this->setClient();
 
+        if ($this->isStripeElements()) {
+            // Stripe Elements verwendet Payment Intents - kein direkter Token erforderlich
+            // Die Zahlung wird über JavaScript und Payment Intents abgewickelt
+            return 'stripe_elements_payment_intent';
+        }
+
         if ($this->isStripeApiCharge()) {
             if (! $this->token) {
                 $this->setErrorMessage(trans('plugins/payment::payment.could_not_get_stripe_token'));
@@ -205,6 +211,20 @@ class StripePaymentService extends StripePaymentAbstract
         $key = 'stripe_api_charge';
 
         return get_payment_setting('payment_type', STRIPE_PAYMENT_METHOD_NAME, $key) == $key;
+    }
+
+    public function isStripeCheckout(): bool
+    {
+        $key = 'stripe_checkout';
+
+        return get_payment_setting('payment_type', STRIPE_PAYMENT_METHOD_NAME, 'stripe_api_charge') == $key;
+    }
+
+    public function isStripeElements(): bool
+    {
+        $key = 'stripe_elements';
+
+        return get_payment_setting('payment_type', STRIPE_PAYMENT_METHOD_NAME, 'stripe_api_charge') == $key;
     }
 
     public function supportedCurrencyCodes(): array

@@ -11,5 +11,6 @@ Route::prefix('payment/stripe')
         Route::middleware(['web', 'core'])->group(function (): void {
             Route::get('success', [StripeController::class, 'success'])->name('success');
             Route::get('error', [StripeController::class, 'error'])->name('error');
+            Route::post('create-payment-intent', [StripeController::class, 'createPaymentIntent'])->name('create-payment-intent');
         });
     });

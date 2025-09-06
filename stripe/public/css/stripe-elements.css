@@ -83,6 +83,20 @@
     border-left: 4px solid #2563eb;
 }
 
+/* Stripe Checkout Info Styling */
+.stripe-checkout-info .alert {
+    border-radius: 8px;
+    border: 1px solid #bee5eb;
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.payment-methods-preview .badge {
+    font-size: 12px;
+    padding: 6px 10px;
+    margin: 2px;
+}
+
 /* Loading States */
 .stripe-loading {
     opacity: 0.6;
@@ -122,6 +136,10 @@
     
     .payment-method-divider {
         margin: 16px 0;
+    }
+    
+    .stripe-checkout-info {
+        max-width: 100% !important;
     }
 }
 

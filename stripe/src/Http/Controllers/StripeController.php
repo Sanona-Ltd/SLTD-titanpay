@@ -11,6 +11,7 @@ use Botble\Payment\Supports\PaymentHelper;
 use Botble\Stripe\Http\Requests\StripePaymentCallbackRequest;
 use Botble\Stripe\Services\Gateways\StripePaymentService;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Stripe\Checkout\Session;
@@ -137,5 +138,73 @@ class StripeController extends BaseController
             ->setNextUrl(PaymentHelper::getCancelURL())
             ->withInput()
             ->setMessage(__('Payment failed!'));
+    }
+
+    public function createPaymentIntent(Request $request, StripePaymentService $stripePaymentService): JsonResponse
+    {
+        try {
+            $stripePaymentService->setClient();
+            
+            // Validierung der Eingabedaten
+            $request->validate([
+                'amount' => 'required|numeric|min:0.01',
+                'currency' => 'required|string|size:3',
+                'name' => 'required|string|max:255',
+            ]);
+
+            $amount = $request->input('amount');
+            $currency = strtolower($request->input('currency'));
+            $name = $request->input('name');
+            
+            // Betrag für Stripe konvertieren (Cents für die meisten Währungen)
+            $stripeAmount = $stripePaymentService->convertAmount($amount);
+            
+            // Payment Intent erstellen
+            $paymentIntent = PaymentIntent::create([
+                'amount' => $stripeAmount,
+                'currency' => $currency,
+                'description' => trans('plugins/payment::payment.payment_description', [
+                    'order_id' => $name,
+                    'site_url' => $request->getHost(),
+                ]),
+                'metadata' => [
+                    'order_name' => $name,
+                    'amount' => $amount,
+                    'currency' => $currency,
+                    'return_url' => $request->input('return_url'),
+                    'callback_url' => $request->input('callback_url'),
+                ],
+                // Automatische Zahlungsbestätigung aktivieren
+                'automatic_payment_methods' => [
+                    'enabled' => true,
+                ],
+                // Unterstützte Zahlungsmethoden
+                'payment_method_types' => [
+                    'card',
+                    'klarna',
+                    'afterpay_clearpay',
+                    'sepa_debit',
+                ],
+            ]);
+
+            do_action('payment_after_api_response', STRIPE_PAYMENT_METHOD_NAME, [
+                'amount' => $amount,
+                'currency' => $currency,
+            ], $paymentIntent->toArray());
+
+            return response()->json([
+                'client_secret' => $paymentIntent->client_secret,
+                'payment_intent_id' => $paymentIntent->id,
+            ]);
+            
+        } catch (Exception $exception) {
+            BaseHelper::logError($exception);
+            
+            return response()->json([
+                'error' => [
+                    'message' => $exception->getMessage() ?: __('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.'),
+                ],
+            ], 400);
+        }
     }
 }

@@ -48,8 +48,9 @@ class StripePaymentMethodForm extends PaymentMethodForm
                 SelectFieldOption::make()
                     ->label(__('Payment Type'))
                     ->choices([
-                        'stripe_api_charge' => 'Stripe API Charge',
+                        'stripe_api_charge' => 'Stripe API Charge (Legacy)',
                         'stripe_checkout' => 'Stripe Checkout',
+                        'stripe_elements' => 'Stripe Elements (mit Wallets: Apple Pay, Google Pay, Twint)',
                     ])
                     ->selected(get_payment_setting(
                         'payment_type',
